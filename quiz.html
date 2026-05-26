@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Where's Your Hearth? · A Garnet Hearth Quiz</title>
+<meta name="description" content="A hearth is already lit somewhere for you — let's find it. A sensory aesthetic quiz from Garnet Hearth." />
+<link href="https://fonts.googleapis.com/css2?family=Ephesis&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --moss:       #2E4A42;
+  --moss-deep:  #1C3028;
+  --rose:       #E9A98E;
+  --rose-pale:  #F2CBBA;
+  --garnet:     #7B1C35;
+  --garnet-mid: #9E2444;
+  --cream:      #F3E7DC;
+  --cream-lt:   #FAF5EF;
+  --ink:        #1A0F08;
+  --ash:        #8A7060;
+  --accent:     #E9A98E;
+  --accent-rgb: 233,169,142;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Jost',sans-serif;
+  background:radial-gradient(ellipse at 30% 20%, #3D5751 0%, #2E4A42 35%, #1C3028 85%, #110B0B 100%);
+  color:var(--cream-lt);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+  position:relative;
+}
+
+/* ATMOSPHERE: grain texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.75 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity:.12;mix-blend-mode:overlay;
+}
+
+/* ATMOSPHERE: pulsing radial glows */
+.glow-1, .glow-2, .glow-3{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+  filter:blur(80px);
+}
+.glow-1{
+  width:500px;height:500px;top:-100px;left:-80px;
+  background:radial-gradient(circle,rgba(233,169,142,.18) 0%,transparent 70%);
+  animation:pulse1 9s ease-in-out infinite;
+}
+.glow-2{
+  width:600px;height:600px;bottom:-120px;right:-120px;
+  background:radial-gradient(circle,rgba(123,28,53,.22) 0%,transparent 70%);
+  animation:pulse2 11s ease-in-out infinite;
+}
+.glow-3{
+  width:400px;height:400px;top:40%;left:55%;
+  background:radial-gradient(circle,rgba(242,203,186,.08) 0%,transparent 70%);
+  animation:pulse3 13s ease-in-out infinite;
+}
+@keyframes pulse1{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes pulse2{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.9;transform:scale(1.08)}}
+@keyframes pulse3{0%,100%{opacity:.4;transform:scale(.95)}50%{opacity:.8;transform:scale(1.05)}}
+
+/* ATMOSPHERE: floating embers */
+.embers{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.ember{
+  position:absolute;bottom:-20px;
+  width:3px;height:3px;border-radius:50%;
+  background:radial-gradient(circle,rgba(233,169,142,.9),rgba(233,169,142,0));
+  animation:rise linear infinite;
+  filter:blur(.5px);
+}
+@keyframes rise{
+  0%{transform:translateY(0) translateX(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-110vh) translateX(40px);opacity:0}
+}
+
+/* All content sits above the atmosphere */
+nav, .wrap, footer{position:relative;z-index:10}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 3.5rem;
+  transition:background .4s,backdrop-filter .4s;
+}
+nav.scrolled{background:rgba(28,48,40,.85);backdrop-filter:blur(12px)}
+.nl{font-family:'Ephesis', cursive;font-size:2rem;color:var(--rose-pale);text-decoration:none;letter-spacing:.02em}
+.nm{display:flex;gap:2.5rem;list-style:none}
+.nm a{
+  font-family:'Ephesis', cursive;font-size:1.5rem;color:var(--rose-pale);
+  text-decoration:none;letter-spacing:.04em;transition:color .2s;
+}
+.nm a:hover{color:var(--cream-lt)}
+.nc{
+  font-family:'Ephesis', cursive;font-size:1.35rem;letter-spacing:.06em;
+  padding:.5rem 1.5rem;border:1px solid var(--rose-pale);color:var(--rose-pale);
+  text-decoration:none;border-radius:3rem;transition:all .3s
+}
+.nc:hover{background:var(--rose-pale);color:var(--moss-deep)}
+
+.wrap{max-width:760px;margin:0 auto;padding:8rem 1.5rem 4rem}
+.ey{font-size:.7rem;letter-spacing:.38em;text-transform:uppercase;color:var(--rose-pale);margin-bottom:1rem;font-weight:400}
+.rule{width:60px;height:1px;background:var(--rose);margin:1.5rem auto}
+
+/* PHASES */
+.phase{display:none;animation:fadeUp .6s cubic-bezier(.2,.7,.3,1)}
+.phase.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* INTRO */
+.intro{text-align:center}
+.intro h1{
+  font-family:'Ephesis',cursive;
+  font-size:clamp(3.5rem,7vw,5.5rem);
+  color:var(--cream-lt);
+  line-height:1;margin-bottom:1rem;font-weight:400;
+  text-shadow:0 2px 24px rgba(0,0,0,.4);
+}
+.intro .sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.25rem;color:var(--rose-pale);margin-bottom:1rem;
+}
+.intro .desc{
+  font-size:1rem;color:rgba(250,245,239,.7);
+  max-width:480px;margin:2rem auto;line-height:1.8;
+}
+.intro .meta{
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(242,203,186,.55);margin-top:2rem;
+}
+.start-btn{
+  display:inline-flex;align-items:center;gap:.75rem;
+  padding:1.1rem 2.75rem;background:var(--garnet);color:var(--cream-lt);
+  border:1px solid var(--garnet);
+  font-family:'Ephesis',cursive;font-size:1.65rem;
+  letter-spacing:.04em;border-radius:3rem;
+  transition:all .35s;margin-top:2.5rem;cursor:pointer;
+  box-shadow:0 8px 32px rgba(123,28,53,.45), 0 0 0 0 rgba(233,169,142,0);
+  position:relative;
+}
+.start-btn:hover{
+  background:var(--garnet-mid);transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(123,28,53,.55), 0 0 24px 4px rgba(233,169,142,.2);
+}
+
+/* QUIZ */
+.q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.q-back{
+  background:transparent;color:rgba(242,203,186,.55);
+  border:1px solid rgba(242,203,186,.2);
+  border-radius:2rem;padding:.4rem 1rem;font-size:.7rem;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  font-family:'Jost',sans-serif;transition:all .25s;
+}
+.q-back:hover{color:var(--cream-lt);border-color:var(--rose-pale)}
+.q-count{color:rgba(242,203,186,.4);font-size:.85rem;letter-spacing:.05em}
+
+.progress{
+  height:2px;background:rgba(242,203,186,.1);border-radius:2px;
+  margin-bottom:2.5rem;overflow:hidden;
+}
+.progress-bar{
+  height:100%;background:linear-gradient(90deg,var(--garnet),var(--rose));
+  transition:width .6s cubic-bezier(.2,.7,.3,1);
+  box-shadow:0 0 12px rgba(233,169,142,.5);
+}
+
+.q-card{
+  background:rgba(250,245,239,.04);
+  border:1px solid rgba(242,203,186,.1);
+  border-radius:.5rem;padding:2rem 2rem 1.75rem;
+  margin-bottom:1.25rem;
+  backdrop-filter:blur(8px);
+}
+.q-label{
+  font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--rose);margin-bottom:.85rem;
+}
+.q-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(1.35rem,2.5vw,1.7rem);color:var(--cream-lt);
+  line-height:1.35;font-weight:400;
+}
+
+.answers{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.75rem}
+.ans{
+  background:rgba(250,245,239,.03);
+  border:1px solid rgba(242,203,186,.08);
+  border-radius:.35rem;padding:1rem 1.25rem;
+  text-align:left;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;line-height:1.55;
+  color:rgba(250,245,239,.78);
+  transition:all .35s cubic-bezier(.2,.7,.3,1);
+  width:100%;
+  position:relative;
+  overflow:hidden;
+}
+/* shimmer on hover */
+.ans::before{
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(242,203,186,.08),transparent);
+  transition:left .8s ease;
+  pointer-events:none;
+}
+.ans:hover{
+  background:rgba(250,245,239,.07);
+  border-color:rgba(242,203,186,.25);
+  transform:translateX(4px);
+  box-shadow:0 4px 20px rgba(0,0,0,.15), -2px 0 0 rgba(233,169,142,.3);
+}
+.ans:hover::before{left:120%}
+.ans.selected{
+  background:rgba(123,28,53,.28);
+  border-color:rgba(233,169,142,.6);
+  color:var(--cream-lt);
+  box-shadow:0 0 0 1px rgba(233,169,142,.2), 0 4px 24px rgba(123,28,53,.3);
+  transform:translateX(4px);
+}
+.ans.dimmed{opacity:.32;transform:translateX(0)}
+.ans .marker{
+  display:inline-block;width:14px;color:rgba(242,203,186,.3);
+  margin-right:.5rem;transition:all .35s;
+}
+.ans.selected .marker{
+  color:var(--rose);
+  animation:starPulse 1.8s ease-in-out infinite;
+}
+@keyframes starPulse{
+  0%,100%{transform:scale(1) rotate(0);opacity:1}
+  50%{transform:scale(1.25) rotate(180deg);opacity:.85}
+}
+
+.q-actions{display:flex;justify-content:flex-end}
+.next-btn{
+  background:linear-gradient(135deg,var(--garnet),var(--rose));
+  color:var(--cream-lt);border:none;border-radius:2rem;
+  padding:.85rem 2rem;font-size:.85rem;letter-spacing:.18em;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Jost',sans-serif;font-weight:300;
+  box-shadow:0 4px 20px rgba(123,28,53,.4);
+  transition:all .3s;
+}
+.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(123,28,53,.55)}
+.next-btn.disabled{
+  background:transparent;color:rgba(242,203,186,.3);
+  border:1px solid rgba(242,203,186,.15);
+  cursor:not-allowed;box-shadow:none;
+}
+
+/* DRAWING YOUR CARD - reveal animation */
+.draw-phase{text-align:center;padding:6rem 0}
+.draw-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.4rem;color:var(--rose-pale);
+  margin-bottom:3rem;letter-spacing:.04em;
+  animation:fadeText .5s ease;
+}
+.draw-card{
+  width:200px;height:280px;margin:0 auto;
+  background:linear-gradient(155deg,var(--garnet) 0%,var(--garnet-mid) 50%,#5C1429 100%);
+  border-radius:.5rem;
+  box-shadow:0 20px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(233,169,142,.3);
+  position:relative;
+  perspective:1000px;
+  transform-style:preserve-3d;
+  animation:cardEnter .8s cubic-bezier(.2,.7,.3,1), cardSpin 2.4s ease-in-out infinite .8s;
+}
+.draw-card::before{
+  content:'✦';position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(242,203,186,.85);font-size:3rem;
+  text-shadow:0 0 24px rgba(233,169,142,.5);
+}
+.draw-card::after{
+  content:'';position:absolute;inset:8px;
+  border:1px solid rgba(242,203,186,.3);border-radius:.35rem;
+  pointer-events:none;
+}
+@keyframes cardEnter{
+  from{opacity:0;transform:translateY(40px) scale(.8)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes cardSpin{
+  0%,100%{transform:rotateY(0) rotateZ(0)}
+  50%{transform:rotateY(180deg) rotateZ(-3deg)}
+}
+@keyframes fadeText{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESULT */
+.result{text-align:center}
+.result-emoji{
+  font-size:4.5rem;margin-bottom:1rem;
+  animation:emojiReveal 1s cubic-bezier(.2,.7,.3,1);
+  filter:drop-shadow(0 4px 20px rgba(var(--accent-rgb),.4));
+}
+@keyframes emojiReveal{
+  from{opacity:0;transform:scale(.3) rotate(-15deg)}
+  to{opacity:1;transform:scale(1) rotate(0)}
+}
+.result-label{
+  font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--rose-pale);margin-bottom:.5rem;
+}
+.result-name{
+  font-family:'Ephesis',cursive;
+  font-size:clamp(3rem,6vw,4.5rem);
+  color:var(--cream-lt);line-height:1;margin-bottom:.5rem;font-weight:400;
+  text-shadow:0 2px 24px rgba(var(--accent-rgb),.3);
+  background:linear-gradient(135deg,var(--cream-lt) 0%,var(--accent) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.result-tag{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.15rem;color:var(--accent);letter-spacing:.04em;
+  margin-bottom:1.5rem;
+}
+.result-rule{width:60px;height:1px;background:var(--accent);margin:1.5rem auto;opacity:.7}
+
+.result-body{
+  background:rgba(250,245,239,.04);
+  border:1px solid rgba(var(--accent-rgb),.15);
+  border-radius:.5rem;padding:2rem;
+  text-align:left;margin-bottom:1.25rem;
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 32px rgba(0,0,0,.2);
+}
+.result-body p{
+  font-size:1rem;color:rgba(250,245,239,.82);
+  line-height:1.85;margin-bottom:1.25rem;
+}
+.result-body p:last-of-type{margin-bottom:0}
+.result-invitation{
+  border-top:1px solid rgba(var(--accent-rgb),.18);
+  padding-top:1.25rem;margin-top:1.25rem;
+}
+.result-invitation p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--accent);font-size:1.1rem;line-height:1.7;
+  margin:0;
+}
+
+.result-vibe{
+  border-top:1px solid rgba(var(--accent-rgb),.18);
+  padding-top:1.25rem;margin-top:1.25rem;
+  text-align:center;
+}
+.vibe-label{
+  font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(var(--accent-rgb),.85);margin-bottom:.5rem;
+}
+.result-vibe p:last-child{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--accent);font-size:1.05rem;line-height:1.7;
+  margin:0;letter-spacing:.02em;
+}
+.result-gh{
+  background:linear-gradient(135deg,rgba(123,28,53,.18),rgba(var(--accent-rgb),.08));
+  border:1px solid rgba(var(--accent-rgb),.22);
+  border-radius:.5rem;padding:1.5rem;
+  text-align:left;margin-bottom:2rem;
+  backdrop-filter:blur(8px);
+}
+.result-gh-label{
+  font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--rose-pale);margin-bottom:.65rem;
+}
+.result-gh p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:rgba(250,245,239,.88);font-size:1rem;line-height:1.75;margin:0;
+}
+
+/* SHAREABLE RESULT CARD - for screenshots */
+.share-card{
+  width:100%;max-width:540px;margin:2rem auto;
+  background:linear-gradient(155deg, #2E4A42 0%, #1C3028 60%, #110B0B 100%);
+  border:1px solid rgba(var(--accent-rgb),.25);
+  border-radius:.75rem;
+  padding:3rem 2rem 2.5rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+.share-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 30% 20%,rgba(var(--accent-rgb),.18) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(123,28,53,.18) 0%,transparent 60%);
+}
+.share-card-inner{position:relative;z-index:2}
+.share-card .brand{
+  font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(242,203,186,.55);margin-bottom:1.5rem;
+}
+.share-card .emoji{font-size:3.5rem;margin-bottom:.5rem}
+.share-card .lab{
+  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--rose-pale);margin-bottom:.4rem;
+}
+.share-card .name{
+  font-family:'Ephesis',cursive;
+  font-size:3rem;color:var(--cream-lt);line-height:1;
+  margin-bottom:.4rem;font-weight:400;
+  background:linear-gradient(135deg,var(--cream-lt) 0%,var(--accent) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.share-card .tag{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--accent);letter-spacing:.04em;
+  margin-bottom:1.25rem;
+}
+.share-card .divider{
+  width:30px;height:1px;background:var(--accent);
+  margin:1rem auto;opacity:.6;
+}
+.share-card .quote{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.95rem;color:rgba(250,245,239,.7);
+  line-height:1.65;max-width:380px;margin:1.25rem auto 1.5rem;
+}
+.share-card .url{
+  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(242,203,186,.4);margin-top:1.25rem;
+}
+.share-instruction{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:rgba(242,203,186,.5);font-size:.85rem;text-align:center;
+  margin-top:.5rem;
+}
+
+.result-actions{
+  display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1.5rem;
+}
+.result-actions a, .result-actions button{
+  font-family:'Jost',sans-serif;
+  font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.85rem 1.5rem;border-radius:2rem;
+  text-decoration:none;cursor:pointer;
+  transition:all .25s;
+}
+.btn-primary{
+  background:var(--garnet);color:var(--cream-lt);
+  border:1px solid var(--garnet);
+}
+.btn-primary:hover{background:var(--garnet-mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(123,28,53,.4)}
+.btn-ghost{
+  background:transparent;color:rgba(242,203,186,.55);
+  border:1px solid rgba(242,203,186,.2);
+}
+.btn-ghost:hover{color:var(--cream-lt);border-color:var(--rose-pale)}
+
+/* SHARE LINKS */
+.share-row{
+  display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap;
+  margin:1.5rem 0 .5rem;
+}
+.share-btn{
+  background:transparent;
+  border:1px solid rgba(var(--accent-rgb),.3);
+  color:var(--accent);
+  border-radius:2rem;padding:.65rem 1.25rem;
+  font-family:'Jost',sans-serif;font-size:.7rem;
+  letter-spacing:.18em;text-transform:uppercase;cursor:pointer;
+  transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;
+  text-decoration:none;
+}
+.share-btn:hover{
+  background:rgba(var(--accent-rgb),.12);
+  border-color:var(--accent);
+  transform:translateY(-1px);
+}
+.share-btn .icon{font-size:.95rem}
+.copy-feedback{
+  display:inline-block;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--accent);font-size:.85rem;
+  opacity:0;transition:opacity .3s;
+  margin-top:.5rem;
+}
+.copy-feedback.show{opacity:1}
+
+.result-foot{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:rgba(242,203,186,.3);font-size:.85rem;
+  margin-top:2.5rem;letter-spacing:.08em;
+}
+
+/* FOOTER */
+footer{background:var(--moss-deep);color:var(--cream-lt);padding:3rem 0 2rem;text-align:center;border-top:1px solid rgba(242,203,186,.15);margin-top:4rem}
+footer .links{display:flex;justify-content:center;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap}
+footer a{
+  font-family:'Ephesis',cursive;font-size:1.35rem;color:var(--rose-pale);
+  text-decoration:none;transition:color .2s;
+}
+footer a:hover{color:var(--cream-lt)}
+footer .copy{
+  font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(250,245,239,.5);
+}
+
+@media (max-width:880px){
+  nav{padding:1rem 1.5rem}
+  .nm{display:none}
+  .nc{font-size:1.15rem;padding:.4rem 1rem}
+  .wrap{padding:6rem 1.25rem 3rem}
+  .q-card{padding:1.5rem 1.4rem 1.3rem}
+  .share-card{padding:2.5rem 1.5rem 2rem}
+  .share-card .name{font-size:2.5rem}
+  .ans:hover{transform:translateX(0)}
+  /* Reduce animations on mobile to be kind to batteries */
+  .glow-1, .glow-2, .glow-3{filter:blur(60px)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+  }
+  .ember{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Atmospheric glows -->
+<div class="glow-1"></div>
+<div class="glow-2"></div>
+<div class="glow-3"></div>
+
+<!-- Floating embers -->
+<div class="embers" id="embers"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nl">Garnet Hearth</a>
+  <ul class="nm">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#services">The Ember</a></li>
+    <li><a href="index.html#letters">Letters</a></li>
+    <li><a href="index.html#blog">Stories</a></li>
+  </ul>
+  <a href="index.html#contact" class="nc">Connect</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="phase active" id="phase-intro">
+    <div class="intro">
+      <p class="ey">A Garnet Hearth Quiz</p>
+      <h1>Where's Your Hearth?</h1>
+      <p class="sub">Beach · Forest · Desert · Snowfall · Garden · Mountain</p>
+      <div class="rule"></div>
+      <p class="desc">A hearth is a fire that's already lit somewhere for you. Yours might be in the woods. Or on a beach. Or in a cabin while it snows. Let's find it.</p>
+      <button class="start-btn" onclick="startQuiz()">Begin the Quiz ✦</button>
+      <p class="meta">Seven questions · About ninety seconds</p>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="phase" id="phase-quiz">
+    <div class="q-header">
+      <button class="q-back" onclick="backToIntro()">← Start over</button>
+      <span class="q-count" id="q-count">1 / 7</span>
+    </div>
+    <div class="progress">
+      <div class="progress-bar" id="progress-bar" style="width:14.29%"></div>
+    </div>
+    <div class="q-card">
+      <p class="q-label" id="q-label">Question 1</p>
+      <h2 class="q-text" id="q-text">Loading...</h2>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="q-actions">
+      <button class="next-btn disabled" id="next-btn" onclick="nextQuestion()" disabled>Choose to continue</button>
+    </div>
+  </div>
+
+  <!-- DRAWING YOUR CARD -->
+  <div class="phase" id="phase-drawing">
+    <div class="draw-phase">
+      <p class="draw-text">Drawing your card...</p>
+      <div class="draw-card"></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="phase" id="phase-result">
+    <div class="result">
+      <button class="q-back" onclick="backToIntro()" style="margin-bottom:1.5rem">← Start over</button>
+      <div class="result-emoji" id="r-emoji">🌊</div>
+      <p class="result-label">You are</p>
+      <h1 class="result-name" id="r-name">The Beach Bonfire</h1>
+      <p class="result-tag" id="r-tag">Where the world opens up.</p>
+      <div class="result-rule"></div>
+      <div class="result-body">
+        <p id="r-body">Loading...</p>
+        <div class="result-vibe">
+          <p class="vibe-label">✦ The vibe</p>
+          <p id="r-vibe"></p>
+        </div>
+      </div>
+
+      <!-- Shareable card -->
+      <div class="share-card" id="share-card">
+        <div class="share-card-inner">
+          <p class="brand">Garnet Hearth</p>
+          <div class="emoji" id="sc-emoji">🌊</div>
+          <p class="lab">I am</p>
+          <h2 class="name" id="sc-name">The Beach Bonfire</h2>
+          <p class="tag" id="sc-tag">Where the world opens up.</p>
+          <div class="divider"></div>
+          <p class="quote" id="sc-quote">Where the world opens up.</p>
+          <p class="url">www.garnethearth.com/quiz</p>
+        </div>
+      </div>
+      <p class="share-instruction">↑ Screenshot this to share your result</p>
+
+      <!-- Share links -->
+      <div class="share-row">
+        <button class="share-btn" onclick="copyLink(this)"><span class="icon">⎘</span> Copy link</button>
+        <a class="share-btn" id="share-x" target="_blank" rel="noopener"><span class="icon">✕</span> Share on X</a>
+        <a class="share-btn" id="share-fb" target="_blank" rel="noopener"><span class="icon">f</span> Share on Facebook</a>
+      </div>
+      <p class="copy-feedback" id="copy-feedback">✦ Link copied to clipboard</p>
+
+      <div class="result-actions">
+        <a href="index.html#services" class="btn-primary">Meet Kelly</a>
+        <button class="btn-ghost" onclick="retake()">Retake</button>
+        <a href="index.html" class="btn-ghost">Back to Home</a>
+      </div>
+      <p class="result-foot">www.garnethearth.com · @garnethearth</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>
+    <div class="links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">The Ember</a>
+      <a href="index.html#letters">Letters</a>
+      <a href="index.html#blog">Stories</a>
+      <a href="index.html#contact">Connect</a>
+    </div>
+    <p class="copy">© 2026 GARNET HEARTH · KELLY GREER · WILMINGTON, NC</p>
+  </div>
+</footer>
+
+<script>
+const QUIZ = {"title": "Where's Your Hearth?", "sub": "A hearth is already lit somewhere for you. Let's find it.", "questions": [{"q": "Pick a Pinterest board you'd actually save to...", "a": [{"t": "salt skin & golden hour", "k": "Beach"}, {"t": "she lives in the woods", "k": "Forest"}, {"t": "wide skies & wild silence", "k": "Desert"}, {"t": "snow days & soft light", "k": "Snowfall"}, {"t": "slow living & dirt under fingernails", "k": "Garden"}, {"t": "rooms with old books & old bones", "k": "Mountain"}]}, {"q": "If you could live inside a show or movie, you'd pick...", "a": [{"t": "The Summer I Turned Pretty. Cousins Beach, all of it.", "k": "Beach"}, {"t": "Outlander. Stone circles, herbs, Scottish highlands.", "k": "Forest"}, {"t": "Game of Thrones. Stars over the red waste, Khaleesi's arc.", "k": "Desert"}, {"t": "Harry Potter. Christmas at Hogwarts, snow on the towers.", "k": "Snowfall"}, {"t": "Lord of the Rings. The Shire. Round doors, garden, second breakfast.", "k": "Garden"}, {"t": "Yellowstone. The Dutton ranch. Mountains, weather, that lodge.", "k": "Mountain"}]}, {"q": "You're at a little shop. Pick the candle...", "a": [{"t": "Coconut & Sea Salt", "k": "Beach"}, {"t": "Cedarwood & Sage", "k": "Forest"}, {"t": "Frankincense & Black Currant", "k": "Desert"}, {"t": "Lavender & Cream", "k": "Snowfall"}, {"t": "Rose & Honey", "k": "Garden"}, {"t": "Cinnamon & Tobacco", "k": "Mountain"}]}, {"q": "Pick the kind of book that pulls you in fastest...", "a": [{"t": "A summer beach read with secrets — the kind you devour in two days.", "k": "Beach"}, {"t": "An immersive fantasy. World you can disappear into. Magic.", "k": "Forest"}, {"t": "An in-depth biography or memoir. Long, real, the kind that haunts you.", "k": "Desert"}, {"t": "A cozy mystery. Small town, snow, a cup of tea by chapter three.", "k": "Snowfall"}, {"t": "A soft, deep romance. Slow burn. Real feelings.", "k": "Garden"}, {"t": "A thrilling mystery or sweeping historical novel. The kind that knows weather.", "k": "Mountain"}]}, {"q": "You're sick on the couch. The show you put on for the hundredth time is...", "a": [{"t": "The Summer I Turned Pretty. Or Mamma Mia for the third time this year.", "k": "Beach"}, {"t": "Outlander. Or A Discovery of Witches.", "k": "Forest"}, {"t": "Game of Thrones. Or any sweeping epic with horses and a horizon.", "k": "Desert"}, {"t": "Harry Potter (all of them). Or Hallmark Christmas, no judgment.", "k": "Snowfall"}, {"t": "Gilmore Girls. The Great British Bake Off. Comfort, all day.", "k": "Garden"}, {"t": "Yellowstone. Downton Abbey. Anything with weather and old money.", "k": "Mountain"}]}, {"q": "A long weekend opens up. You're packing for...", "a": [{"t": "A beach house with a fire pit out back. Long walks. Bonfires.", "k": "Beach"}, {"t": "A cabin tucked deep in the trees. A trail right out the back door.", "k": "Forest"}, {"t": "A desert Airbnb under the Milky Way. Hot springs and no service.", "k": "Desert"}, {"t": "A cozy place with snow in the forecast and a working fireplace.", "k": "Snowfall"}, {"t": "A little farmhouse with a garden you can actually be in.", "k": "Garden"}, {"t": "A stone cottage high up in the mountains. Storms welcome.", "k": "Mountain"}]}, {"q": "Driving alone. Windows down (or up). You hit play on...", "a": [{"t": "Lana Del Rey. Or anything beachy and golden from your teen years.", "k": "Beach"}, {"t": "Hozier. Or any Celtic, fiddle-driven, witchy thing.", "k": "Forest"}, {"t": "Florence + the Machine. Or anything with big drums and chanting.", "k": "Desert"}, {"t": "John Coltrane. Or any slow jazz that aches a little.", "k": "Snowfall"}, {"t": "Norah Jones, Brandi Carlile. Warm, slow, honest singer-songwriter.", "k": "Garden"}, {"t": "Mumford & Sons. Or any folk with weather and strings in it.", "k": "Mountain"}]}], "results": {"Beach": {"name": "The Beach Bonfire", "tagline": "Where the world opens up.", "emoji": "🌊", "body": "Your hearth is lit at the beach. Maybe it's dusk, maybe it's dawn — that gold-pink light, that in-between hour. The fire is small but steady, driftwood crackling in the sand. You have a drink in your hand but you're holding it loosely, because your body's already let go. The salt air. The smell of the ocean. The waves coming in slow and ancient and not asking anything of you. You close your eyes and breathe deep. The horizon goes on forever. The sky and the sea blur where they meet.\n\nYour hearth knows this about you: you don't do well in small rooms or small lives. You need to see far. You need air.", "vibe": "Salt air · Driftwood smoke · Endless horizon · Late summer gold", "accent": "#D89B7C", "accentRgb": "216,155,124"}, "Forest": {"name": "The Forest Hearth", "tagline": "Where the trees keep your secrets.", "emoji": "🌲", "body": "Your hearth is lit in the woods. The trees are old around you and the fire is small in a circle of stones. Maybe it's dusk and the light is going green-gold through the leaves. Maybe it's later and the moon is up. Smoke drifts up through the branches. Moss underfoot. The smell of damp earth and pine and something burning that smells like home. You close your eyes. The forest is alive around you — soft sounds, settling things, an owl somewhere. You can feel the roots underneath you, miles of them, connected. You don't have to explain yourself here.\n\nYour hearth knows this about you: you've always been deeper than people realize. You feel things the woods would feel.", "vibe": "Pine & woodsmoke · Damp earth · Dappled light · Quiet that hums", "accent": "#6B8E6F", "accentRgb": "107,142,111"}, "Desert": {"name": "The Desert Campfire", "tagline": "Where the stars come down to meet you.", "emoji": "🏜️", "body": "Your hearth is lit in the desert. The sun has gone down and the air has cooled and the fire is the brightest thing for miles. Sage burning low. Cool dry wind on your face after the heat of the day. You tip your head back and the stars are obscene — more than you knew existed, the whole Milky Way doing its slow turn across the sky. You close your eyes and the silence is so vast it feels like being held. Like the whole universe is sitting around the fire with you. Nothing in the world is asking anything of you right now.\n\nYour hearth knows this about you: you've been carrying too much, for too long. You need to remember how small (and held) you are.", "vibe": "Sage smoke · Cool desert air · Endless stars · Sacred silence", "accent": "#B89B6E", "accentRgb": "184,155,110"}, "Snowfall": {"name": "The Cabin in Snowfall", "tagline": "Where the world goes hush.", "emoji": "🌨️", "body": "Your hearth is lit inside a little cabin, and outside the snow is falling thick and slow. The wood stove is crackling in the corner. There's a kettle going somewhere. A blanket on your lap, a book you forgot to keep reading. One warm lamp on. Everything outside is muffled and white, the kind of quiet that only winter makes. You close your eyes. The fire pops. The snow keeps falling. There is nowhere you need to be. Time has gone soft and so have you.\n\nYour hearth knows this about you: you don't rest enough. The softness you're craving is not a luxury. It's medicine.", "vibe": "Woodsmoke & pine · Falling snow · One warm lamp · Tea steam", "accent": "#A8B5C1", "accentRgb": "168,181,193"}, "Garden": {"name": "The Garden Fire", "tagline": "Where what you tend tends you back.", "emoji": "🌿", "body": "Your hearth is lit in the garden. A small fire pit, late evening light, the herbs and flowers you've been tending all season blooming around you. Rosemary and lavender on the breeze. The good warm smell of earth that's been worked. Somewhere a bird is doing its last song of the day. You close your eyes and feel the slow miracle of it — the fact that things grew because you tended them. Your hands smell like soil. The fire crackles. You are exactly where you are.\n\nYour hearth knows this about you: you've forgotten how good you are at growing things. Including yourself.", "vibe": "Rosemary & lavender · Warm earth · Golden hour · Slow growing things", "accent": "#A6926E", "accentRgb": "166,146,110"}, "Mountain": {"name": "The Mountain Cabin", "tagline": "Where being held means the most.", "emoji": "🏔️", "body": "Your hearth is lit in a stone cabin, high up somewhere. Wood beams, thick walls, the kind of place that's stood through a hundred storms already. The fire is roaring. Maybe it's pouring outside, maybe the wind is wild in the pines — you don't mind, because you're held. The kettle's on. A heavy blanket. Old books on the shelf. The smell of woodsmoke and cedar and rain on stone. You close your eyes and let the weather do whatever it wants. In here, you are safe and warm and far above the noise.\n\nYour hearth knows this about you: you do a lot for everyone. You're allowed to be the one held, too.", "vibe": "Stone & old wood · Wild weather outside · Roaring fire · Rain on cedar", "accent": "#8B6F8E", "accentRgb": "139,111,142"}}};
+
+let current = 0;
+let scores = {};
+let selected = null;
+let shuffledAnswers = [];
+let currentResultKey = null;
+
+// ─── ATMOSPHERE: spawn floating embers ───────────────────────────
+function spawnEmbers() {
+  const container = document.getElementById('embers');
+  const isMobile = window.innerWidth < 880;
+  const count = isMobile ? 8 : 18;
+  for (let i = 0; i < count; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.left = Math.random() * 100 + '%';
+    e.style.animationDuration = (12 + Math.random() * 14) + 's';
+    e.style.animationDelay = (Math.random() * 18) + 's';
+    e.style.opacity = (0.4 + Math.random() * 0.5);
+    const size = 2 + Math.random() * 3;
+    e.style.width = size + 'px';
+    e.style.height = size + 'px';
+    container.appendChild(e);
+  }
+}
+spawnEmbers();
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  current = 0;
+  scores = {};
+  selected = null;
+  shuffledAnswers = QUIZ.questions.map(q => shuffle(q.a));
+  showPhase('quiz');
+  renderQuestion();
+}
+
+function backToIntro() { showPhase('intro'); }
+function retake() { startQuiz(); }
+
+function showPhase(name) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById('phase-' + name).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderQuestion() {
+  const q = QUIZ.questions[current];
+  const total = QUIZ.questions.length;
+  document.getElementById('q-count').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('q-label').textContent = 'Question ' + (current + 1);
+  document.getElementById('q-text').textContent = q.q;
+
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  selected = null;
+
+  shuffledAnswers[current].forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ans';
+    btn.innerHTML = '<span class="marker"></span>' + ans.t;
+    btn.onclick = () => selectAnswer(ans.k, btn);
+    btn.style.animationDelay = (i * 60) + 'ms';
+    answersDiv.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.add('disabled');
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Choose to continue';
+}
+
+function selectAnswer(key, btn) {
+  selected = key;
+  const buttons = document.querySelectorAll('.ans');
+  buttons.forEach(b => {
+    b.classList.remove('selected');
+    b.classList.add('dimmed');
+    const marker = b.querySelector('.marker');
+    if (marker) marker.textContent = '';
+  });
+  btn.classList.remove('dimmed');
+  btn.classList.add('selected');
+  const marker = btn.querySelector('.marker');
+  if (marker) marker.textContent = '✦';
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('disabled');
+  nextBtn.disabled = false;
+  const isLast = current + 1 === QUIZ.questions.length;
+  nextBtn.textContent = isLast ? 'Reveal My Result ✦' : 'Continue →';
+}
+
+function nextQuestion() {
+  if (!selected) return;
+  scores[selected] = (scores[selected] || 0) + 1;
+
+  if (current + 1 >= QUIZ.questions.length) {
+    drawCard();
+  } else {
+    current++;
+    renderQuestion();
+  }
+}
+
+// ─── DRAWING YOUR CARD ───────────────────────────────────────────
+function drawCard() {
+  showPhase('drawing');
+  // Compute the winning archetype but DON'T show it yet
+  const top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  currentResultKey = top;
+  // Show the card spin for ~2.6s before revealing
+  setTimeout(() => { revealResult(top); }, 2600);
+}
+
+function revealResult(key) {
+  const r = QUIZ.results[key];
+
+  // Apply archetype accent color globally
+  document.documentElement.style.setProperty('--accent', r.accent);
+  document.documentElement.style.setProperty('--accent-rgb', r.accentRgb);
+
+  document.getElementById('r-emoji').textContent = r.emoji;
+  document.getElementById('r-name').textContent = r.name;
+  document.getElementById('r-tag').textContent = r.tagline;
+  document.getElementById('r-body').textContent = r.body;
+  document.getElementById('r-vibe').textContent = r.vibe;
+
+  // Populate shareable card
+  document.getElementById('sc-emoji').textContent = r.emoji;
+  document.getElementById('sc-name').textContent = r.name;
+  document.getElementById('sc-tag').textContent = r.tagline;
+  document.getElementById('sc-quote').textContent = r.vibe;
+
+  // Setup share links
+  const url = 'https://www.garnethearth.com/quiz';
+  const text = "I'm " + r.name + ". Where's your hearth?";
+  document.getElementById('share-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
+  document.getElementById('share-fb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+
+  showPhase('result');
+}
+
+// ─── COPY LINK ───────────────────────────────────────────────────
+function copyLink(btn) {
+  const r = QUIZ.results[currentResultKey];
+  const text = "I'm " + r.name + ". Where's your hearth? https://www.garnethearth.com/quiz";
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const fb = document.getElementById('copy-feedback');
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2200);
+    });
+  } else {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    const fb = document.getElementById('copy-feedback');
+    fb.classList.add('show');
+    setTimeout(() => fb.classList.remove('show'), 2200);
+  }
+}
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if (window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+</script>
+</body>
+</html>
