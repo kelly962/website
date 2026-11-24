@@ -32,6 +32,17 @@ animation-name:gh-drift;animation-timing-function:linear;animation-iteration-cou
 100%{transform:translate3d(var(--dx),var(--rise),0) scale(1.15);opacity:0}}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.ember{display:none}}
 img{max-width:100%}
+.gh-faq{border-top:1px solid #E7D5C5}
+.gh-faq:last-child{border-bottom:1px solid #E7D5C5}
+.gh-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:20px 0;font-family:'Gilda Display',Georgia,serif;font-size:21px;line-height:1.3;color:#1A0F08}
+.gh-faq summary::-webkit-details-marker{display:none}
+.gh-faq summary::after{content:"+";font-family:'Karla',sans-serif;font-size:24px;color:#7B1C35;flex:0 0 auto;line-height:1}
+.gh-faq[open] summary::after{content:"\2212"}
+.gh-faq p{margin:0 0 22px 0;color:#2E4A42;max-width:640px;font-size:16px;line-height:1.7}
+.gh-sampler input{flex:1 1 220px;min-width:0;padding:14px 18px;border:1px solid #E7D5C5;border-radius:999px;background:#FFF9F2;font-family:'Karla',sans-serif;font-size:16px;color:#1A0F08}
+.gh-sampler input:focus{outline:2px solid #E9A98E;outline-offset:1px}
+.gh-sampler button{background:transparent;color:#7B1C35;border:1px solid #7B1C35;border-radius:999px;padding:14px 26px;min-height:48px;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer}
+.gh-sampler button:hover{background:#7B1C35;color:#FFF7EE}
 .hrail{position:relative;overflow:hidden;height:600px;background:#7B1C35}
 .htrack{position:absolute;top:0;left:0;width:100%;display:flex;flex-direction:column;gap:2px;
 animation:gh-rail 52s linear infinite;will-change:transform}
@@ -76,9 +87,9 @@ linear-gradient(to bottom,#7B1C35 0%,rgba(123,28,53,.35) 12%,rgba(123,28,53,0) 3
 <div style="max-width:470px;display:flex;flex-direction:column;gap:16px">
 <span style="font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7060">Certified Reiki Master &nbsp;·&nbsp; Certified Life Coach &nbsp;·&nbsp; Virtual</span>
 <h1 style="margin:0;font-family:'Gilda Display',Georgia,serif;letter-spacing:-0.005em;font-size:clamp(36px,4.8vw,58px);line-height:1.04;color:#7B1C35">A calm place<br>to land.</h1>
-<p style="margin:0;color:#1A0F08;max-width:430px;font-size:21px;line-height:1.5">Supportive, intuitive guidance and energy work for women.</p><p style="margin:0;color:#2E4A42;max-width:420px">Coaching and Reiki, from your couch. Come as you are. Sweatpants and tea welcome.</p>
+<p style="margin:0;color:#1A0F08;max-width:430px;font-size:21px;line-height:1.5">For women who are running on empty and don&rsquo;t have a six-week program in them right now.</p><p style="margin:0;color:#2E4A42;max-width:420px">Coaching and Reiki on Zoom, from your couch. I make no promises of a life transformation. Tale as old as time: I can&rsquo;t change you, only you can do that. Come as you are. Sweatpants and tea welcome.</p>
 <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center">
-<a href="#sessions" style="background:#7B1C35;color:#FFF7EE;text-decoration:none;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;padding:16px 32px;display:inline-block;border-radius:999px;min-height:48px;box-sizing:border-box">See the sessions</a>
+<a href="#sessions" style="background:#7B1C35;color:#FFF7EE;text-decoration:none;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;padding:16px 32px;display:inline-block;border-radius:999px;min-height:48px;box-sizing:border-box">Book a session</a>
 <a href="quiz.html" style="color:#7B1C35;text-decoration:none;border-bottom:1px solid #E9A98E;padding-bottom:3px;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;">Where's Your Hearth?</a>
 </div></div></div>
 <div style="position:relative;flex:1 1 440px;min-width:0;min-height:560px;background:#F2CBBA"><img src="0c2133324272af4a81aa35964fb9e323.jpg" alt="A cozy window nook with a mug of cocoa, a lit candle and a garnet pillow" style="width:100%;height:100%;object-fit:cover;object-position:45% center;display:block;filter:sepia(0.18) saturate(1.05) brightness(1.02);"></div>
@@ -128,8 +139,15 @@ linear-gradient(to bottom,#7B1C35 0%,rgba(123,28,53,.35) 12%,rgba(123,28,53,0) 3
 <p style="margin:6px 0 0 0;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7060">66 pages &nbsp;·&nbsp; Printable + fillable PDF &nbsp;·&nbsp; Undated &nbsp;·&nbsp; $11.11</p>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:10px">
 <a href="https://payhip.com/b/RUjvi" class="payhip-buy-button" data-theme="none" data-product="RUjvi" style="background:#7B1C35;color:#FFF7EE;text-decoration:none;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:16px 32px;display:inline-block;border-radius:999px;min-height:48px;box-sizing:border-box">Get the workbook</a>
-<a href="Keep-It-Simple-SAMPLER.pdf" style="color:#7B1C35;text-decoration:none;border-bottom:1px solid #E9A98E;padding-bottom:3px;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;">Read three pages first</a>
 </div>
+<form class="gh-sampler" action="https://app.kit.com/forms/10239148/subscriptions" method="post" style="margin-top:22px;max-width:460px">
+<label for="gh-sampler-email" style="display:block;font-family:'Karla',sans-serif;font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7060;margin-bottom:10px">Read three pages first &nbsp;&middot;&nbsp; free, to your inbox</label>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<input id="gh-sampler-email" type="email" name="email_address" required placeholder="Your email" autocomplete="email">
+<button type="submit">Send them</button>
+</div>
+<p class="gh-sampler-msg" role="status" style="margin:12px 0 0 0;color:#2E4A42;font-size:15px" hidden></p>
+</form>
 </div>
 </div></div>
 
@@ -175,7 +193,19 @@ linear-gradient(to bottom,#7B1C35 0%,rgba(123,28,53,.35) 12%,rgba(123,28,53,0) 3
 <h3 style="margin:0;font-family:'Gilda Display',Georgia,serif;font-size:24px;line-height:1.2;color:#1A0F08">Show up as you are</h3>
 <p style="margin:0;color:#2E4A42">Grab your tea and your comfiest clothes.</p></div>
 </div>
-<div style="margin:48px 0 0 0;padding:22px 26px;background:#FBF3EA;border-left:3px solid #E9A98E;border-radius:4px;max-width:720px"><p style="margin:0;color:#2E4A42;font-size:16px;line-height:1.7"><strong style="font-weight:500">A note on what this is.</strong> Garnet Hearth is supportive, intuitive guidance and energy work. It is not therapy, it is not medical care, and it is not a replacement for either. If something bigger is going on, I will say so, and I will help you find the right person.</p></div><p style="margin:28px 0 0 0;max-width:720px;color:#8A7060;font-size:15px;line-height:1.7">Cancel or reschedule before the day of your session and your payment moves with you. If you cancel day-of or miss your session, a $20 fee is kept. If life happens that morning, just message me.</p>
+<div style="margin:48px 0 0 0;padding:22px 26px;background:#FBF3EA;border-left:3px solid #E9A98E;border-radius:4px;max-width:720px"><p style="margin:0;color:#2E4A42;font-size:16px;line-height:1.7"><strong style="font-weight:500">A note on what this is.</strong> Garnet Hearth is supportive, intuitive guidance and energy work. It is not therapy, it is not medical care, and it is not a replacement for either. If something bigger is going on, I will say so, and I will help you find the right person.</p></div><div id="faq" style="margin-top:64px;max-width:760px">
+<h3 style="margin:0 0 18px 0;font-family:'Gilda Display',Georgia,serif;font-size:clamp(28px,3.4vw,38px);line-height:1.1;color:#7B1C35">Questions people ask</h3>
+<details class="gh-faq"><summary>What actually happens on a distance Reiki call?</summary><p>We meet on Zoom and talk for a few minutes about what you&rsquo;re carrying. Then you get comfy on your own couch while I do the energy work, with crystals and a soft hearth soundscape. Nothing to do but rest. We check in at the end on what came up.</p></details>
+<details class="gh-faq"><summary>Do I need to believe in any of this for it to work?</summary><p>Nope. You just have to show up and be open to resting for a minute. Skeptics are welcome here. Some of my favorite sessions started with &ldquo;I don&rsquo;t really get this, but okay.&rdquo;</p></details>
+<details class="gh-faq"><summary>What if I cry?</summary><p>Then you cry. That&rsquo;s not a problem to fix, it&rsquo;s usually a sign something needed out. Keep tissues nearby. Zero judgment here, ever.</p></details>
+<details class="gh-faq"><summary>What if I don&rsquo;t know what I want to talk about?</summary><p>That&rsquo;s most people, honestly. &ldquo;I&rsquo;m tired and I don&rsquo;t know why&rdquo; is a perfectly good place to start. We&rsquo;ll find the thread together.</p></details>
+<details class="gh-faq"><summary>What&rsquo;s the difference between coaching, Reiki and The Mindset Shift?</summary><p>Hearth Coaching (60 minutes) is talking it through: the dilemma, the stuck spot, the thing you keep putting off. Hearth Reiki (45 minutes) is energy work, mostly quiet, for when you need to rest more than talk. The Mindset Shift (25 minutes) is a short, focused reset for one thing that&rsquo;s been living rent-free in your head.</p></details>
+<details class="gh-faq"><summary>Can I do this while my kids are home?</summary><p>Yes. I&rsquo;m a mom too, so I get it. If someone needs a snack mid-session, go get the snack. We&rsquo;ll pick right back up.</p></details>
+<details class="gh-faq"><summary>Is this therapy?</summary><p>No. I&rsquo;m a certified life coach and Reiki Master, not a therapist or a medical provider. I don&rsquo;t diagnose or treat anything. If what you&rsquo;re carrying needs a therapist, I&rsquo;ll tell you honestly and help you find the right person.</p></details>
+<details class="gh-faq"><summary>What if I need to cancel?</summary><p>Life happens, especially with kids. Cancel or reschedule before the day of your session and your payment moves with you. If you cancel day-of or miss your session, a $20 fee is kept, because that time was held just for you. If life happens that morning, just message me.</p></details>
+<details class="gh-faq"><summary>When are sessions?</summary><p>Weekdays, on Zoom, Eastern time.</p></details>
+<details class="gh-faq"><summary>Which one should I book first?</summary><p>If you&rsquo;re not sure, start with Hearth Coaching. It&rsquo;s marked &ldquo;start here&rdquo; for a reason. We&rsquo;ll figure out together whether Reiki or a Mindset Shift makes sense after that.</p></details>
+</div>
 </div></div>
 
 <div id="book" style="position:relative;min-height:460px;display:flex;align-items:center;overflow:hidden;background:#2A1A14">
@@ -200,6 +230,13 @@ linear-gradient(to bottom,#7B1C35 0%,rgba(123,28,53,.35) 12%,rgba(123,28,53,0) 3
 
 </div>
 <script type="text/javascript" src="https://payhip.com/payhip.js"></script>
+<script>
+(function(){var f=document.querySelector('.gh-sampler');if(!f||!window.fetch)return;
+f.addEventListener('submit',function(e){e.preventDefault();var b=f.querySelector('button'),m=f.querySelector('.gh-sampler-msg');b.disabled=true;b.textContent='Sending';
+fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}}).then(function(r){if(!r.ok)throw 0;
+m.textContent='You\u2019re in! Check your inbox and tap the button in my email to get your three pages.';m.hidden=false;f.querySelector('div').style.display='none';f.querySelector('label').style.display='none';})
+.catch(function(){m.textContent='Hmm, that did not go through. Try again in a minute?';m.hidden=false;b.disabled=false;b.textContent='Send them';});});})();
+</script>
 </body>
 </html>
 
