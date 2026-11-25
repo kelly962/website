@@ -378,6 +378,18 @@ nav.scrolled{background:rgba(28,48,40,.85);backdrop-filter:blur(12px)}
   color:rgba(250,245,239,.88);font-size:1rem;line-height:1.75;margin:0;
 }
 
+.match-name{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.9rem;line-height:1.15;color:var(--cream-lt);margin:0 0 .2rem 0}
+.match-meta{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,203,186,.75);margin:0 0 .8rem 0!important;font-family:'Jost',sans-serif!important;font-style:normal!important}
+.match-book{display:inline-block;margin-top:1.1rem;font-family:'Jost',sans-serif;font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;padding:.9rem 1.6rem;border-radius:2rem;text-decoration:none;background:var(--garnet);color:var(--cream-lt);border:1px solid var(--garnet);transition:all .25s}
+.match-book:hover{background:var(--garnet-mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(123,28,53,.4)}
+.q-sampler{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.q-sampler input{flex:1 1 200px;min-width:0;padding:.85rem 1.1rem;border-radius:2rem;border:1px solid rgba(242,203,186,.35);background:rgba(250,245,239,.08);color:var(--cream-lt);font-family:'Jost',sans-serif;font-size:1rem}
+.q-sampler input::placeholder{color:rgba(242,203,186,.6)}
+.q-sampler input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.q-sampler button{font-family:'Jost',sans-serif;font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;padding:.85rem 1.4rem;border-radius:2rem;cursor:pointer;background:transparent;color:var(--rose-pale);border:1px solid var(--rose-pale);transition:all .25s}
+.q-sampler button:hover{background:var(--rose-pale);color:var(--garnet)}
+.q-msg{margin-top:.8rem!important;font-style:normal!important;font-family:'Jost',sans-serif!important;font-size:.95rem!important}
+
 /* SHAREABLE RESULT CARD - for screenshots */
 .share-card{
   width:100%;max-width:540px;margin:2rem auto;
@@ -611,6 +623,26 @@ footer .copy{
         </div>
       </div>
 
+      <!-- Session match -->
+      <div class="result-gh" id="r-match">
+        <p class="result-gh-label">The session that meets you there</p>
+        <h2 class="match-name" id="m-name">Hearth Coaching</h2>
+        <p class="match-meta" id="m-meta">60 minutes &middot; on Zoom</p>
+        <p id="m-why"></p>
+        <a class="match-book" id="m-book" href="index.html#sessions" target="_blank" rel="noopener">Book a session</a>
+      </div>
+
+      <!-- Email capture -->
+      <div class="result-gh">
+        <p class="result-gh-label">Five pages to take with you</p>
+        <p>Want five free pages from my workbook to go with this one? Tell me where to send them.</p>
+        <form class="q-sampler" id="q-sampler" action="https://app.kit.com/forms/10239148/subscriptions" method="post">
+          <input type="email" name="email_address" required placeholder="Your email" autocomplete="email" aria-label="Your email">
+          <button type="submit">Send them</button>
+        </form>
+        <p class="q-msg" id="q-msg" role="status" hidden></p>
+      </div>
+
       <!-- Shareable card -->
       <div class="share-card" id="share-card">
         <div class="share-card-inner">
@@ -824,8 +856,46 @@ function revealResult(key) {
   document.getElementById('share-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
   document.getElementById('share-fb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 
+  showMatch(key);
   showPhase('result');
 }
+
+// ─── SESSION MATCH ───────────────────────────────────────────────
+const SESSIONS = {
+  coach: {name:'Hearth Coaching', meta:'60 minutes \u00b7 on Zoom', url:'https://calendly.com/kelly-garnethearth/intuitive-guide-coaching-session'},
+  shift: {name:'The Mindset Shift', meta:'25 minutes \u00b7 on Zoom', url:'https://calendly.com/kelly-garnethearth/the-mindset-shift'},
+  reiki: {name:'Hearth Reiki', meta:'45 minutes \u00b7 on Zoom', url:'https://calendly.com/kelly-garnethearth/hearth-reiki'}
+};
+const MATCH = {
+  Beach:  ['coach', "Your hearth faces the horizon. When you're ready to talk through what's next, a cozy hour together is the place to start."],
+  Cabin:  ['coach', "Your hearth is a warm room with nowhere to be. That's what an hour of coaching feels like: settle in and talk it through."],
+  Lake:   ['shift', "Your hearth is where you finally hear yourself. A short, focused reset helps you find that quiet on a loud day."],
+  Porch:  ['shift', "Your hearth is shelter from the storm. When your mind gets loud, 25 minutes is enough to ground and find your next small step."],
+  Forest: ['reiki', "Your hearth is a quiet place to set things down. Distance Reiki gives you exactly that: nothing to do but rest."],
+  Desert: ['reiki', "Your hearth is wide open and still. Reiki meets you there, on your own couch, while I do the energy work."]
+};
+function showMatch(key){
+  const m = MATCH[key]; if(!m) return;
+  const sess = SESSIONS[m[0]];
+  document.getElementById('m-name').textContent = sess.name;
+  document.getElementById('m-meta').textContent = sess.meta;
+  document.getElementById('m-why').textContent = m[1];
+  document.getElementById('m-book').href = sess.url;
+}
+(function(){
+  const f = document.getElementById('q-sampler'); if(!f || !window.fetch) return;
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    const b = f.querySelector('button'), msg = document.getElementById('q-msg');
+    b.disabled = true; b.textContent = 'Sending';
+    fetch(f.action, {method:'POST', body:new FormData(f), headers:{Accept:'application/json'}})
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(j){ if(j && j.status === 'failed') throw 0;
+        msg.textContent = 'You\u2019re in! Check your inbox and tap the button in my email to get your five pages.';
+        msg.hidden = false; f.style.display = 'none'; })
+      .catch(function(){ msg.textContent = 'Hmm, that did not go through. Try again in a minute?'; msg.hidden = false; b.disabled = false; b.textContent = 'Send them'; });
+  });
+})();
 
 // ─── COPY LINK ───────────────────────────────────────────────────
 function copyLink(btn) {
